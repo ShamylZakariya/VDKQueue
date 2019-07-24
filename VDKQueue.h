@@ -93,12 +93,12 @@ typedef NS_OPTIONS(unsigned, VDKQueueEvent) {
 
     /// All events.
     VDKQueueEventAll = VDKQueueEventRename
-                     | VDKQueueEventWrite
-                     | VDKQueueEventDelete
-                     | VDKQueueEventAttributeChange
-                     | VDKQueueEventSizeIncrease
-                     | VDKQueueEventLinkCountChanged
-                     | VDKQueueEventAccessRevocation
+        | VDKQueueEventWrite
+        | VDKQueueEventDelete
+        | VDKQueueEventAttributeChange
+        | VDKQueueEventSizeIncrease
+        | VDKQueueEventLinkCountChanged
+        | VDKQueueEventAccessRevocation
 };
 
 //
@@ -106,13 +106,13 @@ typedef NS_OPTIONS(unsigned, VDKQueueEvent) {
 //      Object          =   the instance of VDKQueue that was watching for changes
 //      userInfo.path   =   the file path where the change was observed
 //
-extern NSString *const VDKQueueRenameNotification;
-extern NSString *const VDKQueueWriteNotification;
-extern NSString *const VDKQueueDeleteNotification;
-extern NSString *const VDKQueueAttributeChangeNotification;
-extern NSString *const VDKQueueSizeIncreaseNotification;
-extern NSString *const VDKQueueLinkCountChangeNotification;
-extern NSString *const VDKQueueAccessRevocationNotification;
+extern NSString* const VDKQueueRenameNotification;
+extern NSString* const VDKQueueWriteNotification;
+extern NSString* const VDKQueueDeleteNotification;
+extern NSString* const VDKQueueAttributeChangeNotification;
+extern NSString* const VDKQueueSizeIncreaseNotification;
+extern NSString* const VDKQueueLinkCountChangeNotification;
+extern NSString* const VDKQueueAccessRevocationNotification;
 
 //
 //  Or, instead of subscribing to notifications, you can specify a delegate and implement this method to respond to kQueue events.
@@ -123,13 +123,13 @@ extern NSString *const VDKQueueAccessRevocationNotification;
 
 @protocol VDKQueueDelegate <NSObject>
 
-- (void)queue:(VDKQueue *)queue didReceiveNotification:(NSString *)notificationName forPath:(NSString *)fpath;
+- (void)queue:(VDKQueue*)queue didReceiveNotification:(NSString*)notificationName forPath:(NSString*)fpath;
 
 @end
 
 @interface VDKQueue : NSObject
 
-@property (nonatomic, weak) id <VDKQueueDelegate> delegate;
+@property (nonatomic, weak) id<VDKQueueDelegate> delegate;
 @property (nonatomic, retain) dispatch_queue_t queue;
 /**
  * By default, notifications are posted only if there is no delegate set.
@@ -144,11 +144,11 @@ extern NSString *const VDKQueueAccessRevocationNotification;
  *
  *  Warning: You must pass full, root-relative paths. Do not pass tilde-abbreviated paths or file URLs.
  */
-- (void)addPath:(NSString *)aPath;
+- (void)addPath:(NSString*)aPath;
 /// See note above for values to pass in "flags"
-- (void)addPath:(NSString *)aPath notifyingAbout:(VDKQueueEvent)flags;
+- (void)addPath:(NSString*)aPath notifyingAbout:(VDKQueueEvent)flags;
 
-- (void)removePath:(NSString *)aPath;
+- (void)removePath:(NSString*)aPath;
 - (void)removeAllPaths;
 
 /// Returns the number of paths that this VDKQueue instance is actively watching.
