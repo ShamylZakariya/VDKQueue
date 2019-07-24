@@ -21,6 +21,10 @@
 
 #import "VDKQueue.h"
 
+#define WEAK_SELF __weak typeof(self) weakSelf = self;
+#define STRONG_SELF __strong __typeof__(weakSelf) strongSelf = weakSelf;
+#define STRONG_SELF_OR_BAIL __strong __typeof__(weakSelf) strongSelf = weakSelf; if (!strongSelf) return;
+
 NSString *const VDKQueueRenameNotification = @"VDKQueueFileRenamedNotification";
 NSString *const VDKQueueWriteNotification = @"VDKQueueFileWrittenToNotification";
 NSString *const VDKQueueDeleteNotification = @"VDKQueueFileDeletedNotification";
@@ -245,12 +249,15 @@ NSString *const VDKQueueAccessRevocationNotification = @"VDKQueueAccessWasRevoke
                 NSArray *notes = [[NSArray alloc] initWithArray:notesToPost];   // notesToPost will be changed in the next loop iteration, which will likely occur before the block below runs.
 
                 // Post the notifications (or call the delegate method) on the specified queue.
+                WEAK_SELF;
                 dispatch_async(_queue, ^{
+                    STRONG_SELF_OR_BAIL;
+
                     for (NSString *note in notes)
                     {
-                        [_delegate queue:self didReceiveNotification:note forPath:fpath];
+                        [strongSelf->_delegate queue:self didReceiveNotification:note forPath:fpath];
 
-                        if (!_delegate || _alwaysPostNotifications)
+                        if (!strongSelf->_delegate || strongSelf->_alwaysPostNotifications)
                             [[NSNotificationCenter defaultCenter] postNotificationName:note object:self userInfo:@{@"path": fpath}];
                     }
                 });
